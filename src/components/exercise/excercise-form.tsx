@@ -6,9 +6,7 @@ import styled from 'styled-components'
 import { useAppDispatch } from '../../redux/hooks';
 import { exerciseType, add, STREAM_TYPES, ACTIVITY_TYPES } from '../../redux/features/training';
 
-type propTypes = {
-    data: exerciseType[]
-}
+
 //----////----////----////----////----//
 const Form = styled.form`
     display: flex;
@@ -33,6 +31,9 @@ const Cell = styled.td`
 //----////----////----////----////----//
 const HOUR_IN_MILLISECONDS = 3600000;
 
+type propTypes = {
+    data: exerciseType[]
+}
 function ExcerciseForm(props: propTypes) {
     const { data } = props;
     const [stream, setStream] = useState('BASE');
@@ -89,7 +90,6 @@ function ExcerciseForm(props: propTypes) {
 
     return (
         <Fragment>
-
             <div>
                 <h2>Road so far</h2>
                 <Table>

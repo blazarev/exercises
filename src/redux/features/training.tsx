@@ -11,8 +11,8 @@ export const ACTIVITY_TYPES = {
     PRACTICE: 'PRACTICE'
 };
 
-type streamTypes = 'BASE' | 'FRAMEWORK' | 'ALGORITHMS' | 'ARCHITECTURE'; 
-type activityTypes = 'THEORY' | 'PRACTICE';
+type streamTypes =  keyof typeof STREAM_TYPES;
+type activityTypes = keyof typeof ACTIVITY_TYPES; 
 
 export type exerciseType = {
     id: number,
