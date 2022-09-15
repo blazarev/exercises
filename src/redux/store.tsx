@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import counterReducer from './features/counter-slice'
-import exerciseReducer from './features/training';
+import exerciseReducer from './features/exercises';
 
 export const store = configureStore({
     reducer: {

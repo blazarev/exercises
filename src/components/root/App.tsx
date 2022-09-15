@@ -1,19 +1,26 @@
-// import Counter from '../counter/counter';
+import { useState, useEffect } from 'react';
+
 import ExcerciseForm from '../exercise/excercise-form';
+import { SLICE_ACTIONS } from '../../redux/features/exercises';
 
 import './App.css';
 
-import { useAppSelector } from '../../redux/hooks';
+import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 
 function App() {
-  // const value = useAppSelector((state) => state.counter.value)
-  const exercises = useAppSelector((state) => state.exercise.data)
+    const [isDbConnected, setIsDbConnected] = useState(false)
 
+    const dispatch = useAppDispatch();
+    const exercises = useAppSelector((state) => state.exercise.data)
+
+    useEffect(() => {
+        dispatch(SLICE_ACTIONS.getAllExercises()).then(() => { setIsDbConnected(true) })
+    }, [])
 
   return (
     <div className="App">
-      {/* <Counter value={ value } />  */}
-      <ExcerciseForm data={ exercises }/>
+        <h3>connection status &nbsp; { isDbConnected ? 'success' : 'loading...' }</h3>
+        { isDbConnected && <ExcerciseForm data={ exercises }/> }
     </div>
   );
 }

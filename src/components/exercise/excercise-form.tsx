@@ -4,75 +4,77 @@ import { uniqueId } from 'lodash';
 import styled from 'styled-components'
 
 import { useAppDispatch } from '../../redux/hooks';
-import { exerciseType, add, STREAM_TYPES, ACTIVITY_TYPES } from '../../redux/features/training';
 
+import { SLICE_ACTIONS, SLICE_CONSTANTS } from '../../redux/features/exercises';
+import { streamTypes, activityTypes, exerciseType } from '../../redux/features/exercises'
 
-//----////----////----////----////----//
 const Form = styled.form`
     display: flex;
-`
+    margin-bottom: 100px;
+    `;
 const Table = styled.table`
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;    
-    text-align: center;
-`;
+    text-align: center;`;
+
 const Head = styled.th`
     border: 1px solid #ddd;
     padding: 12px;
     text-align: center;
     background-color: #04AA6D;
-    color: white;
-`;
+    color: white;`;
 const Row = styled.tr``;
 const Cell = styled.td`
     border: 1px solid #ddd;
     padding: 8px;
 `;
-//----////----////----////----////----//
+
 const HOUR_IN_MILLISECONDS = 3600000;
 
-type propTypes = {
-    data: exerciseType[]
-}
+
+const ACTIVITIES = Object.keys(SLICE_CONSTANTS.ACTIVITIES);
+const STREAMS = Object.keys(SLICE_CONSTANTS.STREAMS);
+
+type propTypes = { data: exerciseType[] };
 function ExcerciseForm(props: propTypes) {
     const { data } = props;
-    const [stream, setStream] = useState('BASE');
+
+    const [stream, setStream] = useState<streamTypes>(SLICE_CONSTANTS.STREAMS.BASE as streamTypes);
+    const [activity, setActivity] = useState<activityTypes>(SLICE_CONSTANTS.ACTIVITIES.PRACTICE as activityTypes);
     const [duration, setDuration] = useState(1);
-    const [activity, setActivity] = useState('PRACTICE');
 
     const dispatch = useAppDispatch();
-
 
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault();
         
         const execrice = {
-            id: uniqueId(),
-            date: (new Date).getTime(),
+            id: +uniqueId(),
+            date: (new Date()).getTime(),
             stream: stream,
             duration: duration*HOUR_IN_MILLISECONDS, // convert to hours
             activity: activity
         }
-        //todo@lbp: add final validation 
 
-        dispatch(add(execrice));
+        dispatch(SLICE_ACTIONS.saveExercise(execrice));
     }
 
-    const handleStreamChange = (e: React.FormEvent<HTMLSelectElement>): void => {
+    const handleStreamChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+        const { value }  = e.currentTarget;
+        //todo@lbp: add field validation and err msg while typing
+
+        setStream(value as streamTypes)
+    }
+
+    const handleActivityChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
         const { value } = e.currentTarget;
-        //todo@lbp: add field validation 
-        setStream(value)
+        //todo@lbp: add field validation and err msg while typing
+        setActivity(value as activityTypes);
     }
 
-    const handleActivityChange = (e: React.FormEvent<HTMLSelectElement>): void => {
-        const { value } = e.currentTarget;
-        //todo@lbp: add field validation 
-        setActivity(value);
-    }
-
-    const handleDurationChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const value = parseInt(e.currentTarget.value, 10)
-        //todo@lbp: add field validation 
+        //todo@lbp: add field validation and err msg while typing
         setDuration(value)
     }
 
@@ -108,19 +110,13 @@ function ExcerciseForm(props: propTypes) {
             <div>
                 <h2>Add new Exercise</h2>
                 <Form onSubmit={ handleSubmit }>
-                    {/* <input type="text" id='stream' value={ stream } onChange={ handleStreamChange }/> */}
-
-                    <select name="stream" id="stream" onChange={ handleActivityChange } >
-                        <option value={ ACTIVITY_TYPES.PRACTICE }>{ ACTIVITY_TYPES.PRACTICE }</option>
-                        <option value={ ACTIVITY_TYPES.THEORY }>{ ACTIVITY_TYPES.THEORY }</option>
+                    <select name="activity" id="activity" onChange={ handleActivityChange } >
+                        { ACTIVITIES.map(activity => <option key={ activity } value={ activity }>{ activity }</option>) }
                     </select>
                     <br />
 
                     <select name="stream" id="stream" onChange={ handleStreamChange } >
-                        <option value={ STREAM_TYPES.BASE }>{ STREAM_TYPES.BASE }</option>
-                        <option value={ STREAM_TYPES.FRAMEWORK }>{ STREAM_TYPES.FRAMEWORK }</option>
-                        <option value={ STREAM_TYPES.ALGORITHMS }>{ STREAM_TYPES.ALGORITHMS }</option>
-                        <option value={ STREAM_TYPES.ARCHITECTURE }>{ STREAM_TYPES.ARCHITECTURE }</option>
+                        { STREAMS.map(stream => <option key= { stream } value={ stream }>{ stream }</option>) }
                     </select>
                     <br />
 
