@@ -18,7 +18,7 @@ type streamTypes =  keyof typeof STREAMS;
 type activityTypes = keyof typeof ACTIVITIES; 
 type exerciseType = {
     id: number,
-    date: number,
+    creationTimeStamp: number,
     stream: streamTypes,
     duration: number,
     activity: activityTypes

@@ -1,27 +1,42 @@
 import { useState, useEffect } from 'react';
-
-import ExcerciseForm from '../exercise/excercise-form';
-import { SLICE_ACTIONS } from '../../redux/features/exercises';
-
-import './App.css';
+import styled from 'styled-components';
 
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 
+import ExcerciseTable from '../exercise-table/excercise-table';
+import ExcerciseForm from '../exercise-from/exercise-form';
+import { SLICE_ACTIONS as exerciseActions } from '../../redux/features/exercises';
+
+import './App.css';
+
+const Wrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const ContentBlock = styled.div`
+    height: 100%;
+`;
 function App() {
-    const [isDbConnected, setIsDbConnected] = useState(false)
+    const [isDbConnected, setIsDbConnected] = useState(false);
 
     const dispatch = useAppDispatch();
-    const exercises = useAppSelector((state) => state.exercise.data)
+    const exercises = useAppSelector((state) => state.exercise.data);
 
     useEffect(() => {
-        dispatch(SLICE_ACTIONS.getAllExercises()).then(() => { setIsDbConnected(true) })
-    }, [])
+        dispatch(exerciseActions.getAllExercises()).then(() => { setIsDbConnected(true) });
+    }, []);
 
   return (
-    <div className="App">
-        <h3>connection status &nbsp; { isDbConnected ? 'success' : 'loading...' }</h3>
-        { isDbConnected && <ExcerciseForm data={ exercises }/> }
-    </div>
+    <Wrapper className="App">
+        <ContentBlock>
+            { !isDbConnected ? 'loading data...' : <ExcerciseTable data={ exercises }/> }
+        </ContentBlock>
+        <ContentBlock>
+            <ExcerciseForm />
+        </ContentBlock>
+    </Wrapper>
   );
 }
 
