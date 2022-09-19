@@ -22,16 +22,24 @@ function App() {
     const [isDbConnected, setIsDbConnected] = useState(false);
 
     const dispatch = useAppDispatch();
-    const exercises = useAppSelector((state) => state.exercise.data);
+    // const exercises = useAppSelector((state) => state.exercise.data);
 
     useEffect(() => {
         dispatch(exerciseActions.getAllExercises()).then(() => { setIsDbConnected(true) });
     }, []);
 
+    const renderData = (): JSX.Element => {
+        return (
+            <>
+                <h2>Road so far</h2>
+                <ExcerciseTable />
+            </>
+        )
+    }
   return (
     <Wrapper className="App">
         <ContentBlock>
-            { !isDbConnected ? 'loading data...' : <ExcerciseTable data={ exercises }/> }
+            { !isDbConnected ? 'loading data...' : renderData() }
         </ContentBlock>
         <ContentBlock>
             <ExcerciseForm />
