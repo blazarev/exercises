@@ -1,11 +1,12 @@
-import React from 'react';
 import styled from 'styled-components'
 import { exerciseType } from '../../redux/features/exercises'
+
 const Cell = styled.td`
     border: 1px solid #ddd;
     padding: 8px;
 `;
 const Row = styled.tr``;
+
 const HOUR_IN_MILLISECONDS = 3600000;
 
 function RowItem (props: exerciseType) {
@@ -19,5 +20,4 @@ function RowItem (props: exerciseType) {
         </Row>
     );
 }
-
-export default React.memo(RowItem);
+export default RowItem;
